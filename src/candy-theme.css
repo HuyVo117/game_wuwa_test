@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Candy theme overrides */
+:root {
+  /* Custom candy colors */
+  --candy-pink: #FF70A6;
+  --candy-blue: #70D6FF;
+  --candy-yellow: #FFD670;
+  --candy-green: #A2FF70;
+  --candy-purple: #C770FF;
+  
+  /* Background updates */
+  --background-candy: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+  --board-candy: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 240, 245, 0.9));
+  
+  /* Fonts */
+  --font-candy: 'Poppins', var(--font-family-base);
+}
+
+/* Apply candy theme */
+body {
+  font-family: var(--font-candy);
+  background: var(--background-candy);
+  background-attachment: fixed;
+}
+
+/* Game grid candy styling */
+.game-grid {
+  background: var(--board-candy);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), inset 0 -2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add floating animations to elements */
+.hub-title, .color-palette h3, .moves-counter {
+  animation: float 6s ease-in-out infinite;
+}
+
+.hub-subtitle, .btn--primary {
+  animation: float 4s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+/* Add sparkle effect to level buttons */
+.level-btn::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.level-btn::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.8), transparent 50%);
+  top: 0;
+  left: 0;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.level-btn {
+  animation: twinkle 4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.7s);
+}
+
+.level-btn:nth-child(3n + 1) { --i: 0; }
+.level-btn:nth-child(3n + 2) { --i: 1; }
+.level-btn:nth-child(3n + 3) { --i: 2; }
+
+@keyframes twinkle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+/* Custom candy grid cells */
+.grid-cell {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Victory shine */
+.grid-cell.completed::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  20%, 100% { transform: translateX(100%) rotate(45deg); }
+}

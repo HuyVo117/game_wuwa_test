@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GAME_CONFIG } from '../gameConfig';
+import { useSounds } from './useSounds';
 
 const GRID_SIZE = Number(import.meta.env.VITE_GAME_GRID_SIZE) || GAME_CONFIG.gridSize;
 const DEFAULT_DIFF = import.meta.env.VITE_GAME_DEFAULT_DIFFICULTY || 'easy';
@@ -13,6 +14,7 @@ export function useOverflowGame(initialDifficulty=DEFAULT_DIFF) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentLevel, setCurrentLevel] = useState(null);
   const movesHistory = useRef([]);
+  const { playSound } = useSounds();
 
   const difficulty = GAME_CONFIG.difficulties[difficultyKey];
 
@@ -25,12 +27,18 @@ export function useOverflowGame(initialDifficulty=DEFAULT_DIFF) {
     setGrid(cells);
   }, [gameColors]);
 
-  const start = useCallback(() => {
+  // Always update gameColors when difficultyKey changes
+  useEffect(() => {
     const dif = GAME_CONFIG.difficulties[difficultyKey];
     setMovesRemaining(dif.moves);
     setGameColors(GAME_CONFIG.colors.slice(0, dif.colorCount));
-    setIsGameActive(true);
   }, [difficultyKey]);
+
+  const start = useCallback(() => {
+    console.log('Starting game with difficulty:', difficultyKey);
+    playSound('click');
+    setIsGameActive(true);
+  }, [difficultyKey, playSound]);
 
   useEffect(() => {
     if (isGameActive) {
@@ -45,7 +53,7 @@ export function useOverflowGame(initialDifficulty=DEFAULT_DIFF) {
   if (row>0) neighbors.push(index - GRID_SIZE);
   if (row< GRID_SIZE -1) neighbors.push(index + GRID_SIZE);
     if (col>0) neighbors.push(index-1);
-    if (col< GAME_CONFIG.gridSize -1) neighbors.push(index+1);
+    if (col< GRID_SIZE -1) neighbors.push(index+1);
     return neighbors;
   }, []);
 
@@ -82,30 +90,43 @@ export function useOverflowGame(initialDifficulty=DEFAULT_DIFF) {
     if (!isGameActive || movesRemaining <=0 || isAnimating) return;
     const startColor = grid[0];
     if (startColor === selectedColor) return;
+    
+    playSound('select');
     movesHistory.current.push(selectedColor);
     setIsAnimating(true);
     await floodFill(0, startColor, selectedColor);
     setMovesRemaining(m => m-1);
     setIsAnimating(false);
-  }, [grid, isGameActive, movesRemaining, isAnimating, floodFill]);
+  }, [grid, isGameActive, movesRemaining, isAnimating, floodFill, playSound]);
 
   const won = useMemo(()=> grid.length>0 && grid.every(c => c === grid[0]), [grid]);
   const lost = useMemo(()=> !won && isGameActive && movesRemaining<=0, [won, isGameActive, movesRemaining]);
 
   useEffect(() => {
+    if (won) {
+      playSound('success');
+    } else if (lost) {
+      playSound('fail');
+    }
+    
     if (won || lost) setIsGameActive(false);
-  }, [won, lost]);
+  }, [won, lost, playSound]);
 
   const reset = useCallback(() => {
+    playSound('click');
     setIsGameActive(true); // triggers grid regen via effect
     const dif = GAME_CONFIG.difficulties[difficultyKey];
     setMovesRemaining(dif.moves);
     setGameColors(GAME_CONFIG.colors.slice(0, dif.colorCount));
     movesHistory.current=[];
-  }, [difficultyKey]);
+  }, [difficultyKey, playSound]);
 
   const setDifficulty = useCallback((d)=>{
     setDifficultyKey(d);
+    // Update game settings immediately when difficulty changes
+    const dif = GAME_CONFIG.difficulties[d];
+    setMovesRemaining(dif.moves);
+    setGameColors(GAME_CONFIG.colors.slice(0, dif.colorCount)); 
   },[]);
 
   const pickLevel = useCallback((level) => {
@@ -113,6 +134,10 @@ export function useOverflowGame(initialDifficulty=DEFAULT_DIFF) {
     setDifficultyKey(level.difficulty);
     start();
   }, [start]);
+
+  const clearLevel = useCallback(() => {
+    setCurrentLevel(null);
+  }, []);
 
   const nextLevel = useCallback(()=>{
     if (!currentLevel) return;
@@ -132,6 +157,6 @@ export function useOverflowGame(initialDifficulty=DEFAULT_DIFF) {
     won, lost,
     start, reset,
     setDifficulty, selectColor,
-    pickLevel, nextLevel
+  pickLevel, nextLevel, clearLevel
   };
 }

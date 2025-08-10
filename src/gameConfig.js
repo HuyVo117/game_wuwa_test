@@ -7,10 +7,10 @@ export const GAME_CONFIG = {
     difficult: { moves: 3, colorCount: 5 }
   },
   levelSets: [
-    { id: 1, name: 'Level 1', difficulty: 'easy' },
-    { id: 2, name: 'Level 2', difficulty: 'easy' },
-    { id: 3, name: 'Level 3', difficulty: 'normal' },
-    { id: 4, name: 'Level 4', difficulty: 'normal' },
-    { id: 5, name: 'Level 5', difficulty: 'difficult' }
+    { id: 1, name: 'Khu vườn kẹo', difficulty: 'easy' },
+    { id: 2, name: 'Thác ngọt ngào', difficulty: 'easy' },
+    { id: 3, name: 'Đồi chocolate', difficulty: 'normal' },
+    { id: 4, name: 'Núi kem', difficulty: 'normal' },
+    { id: 5, name: 'Lâu đài soda', difficulty: 'difficult' }
   ]
 };
