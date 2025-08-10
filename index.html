@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overflow Palette - Color Puzzle Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Hub Screen (Game Selection / Level Map) -->
+    <div id="hubScreen" class="screen active hub-screen">
+        <div class="hub-header">
+            <h1 class="hub-title">Color Worlds</h1>
+            <p class="hub-subtitle">Chọn màn để chơi (phong cách Candy)</p>
+        </div>
+        <div class="levels-container">
+            <div id="levelsGrid" class="levels-grid"></div>
+        </div>
+        <div class="hub-footer">
+            <button id="openDifficultyPanel" class="btn btn--secondary btn--sm">Chơi chế độ Tự do</button>
+        </div>
+    </div>
+    <!-- Intro Screen -->
+    <div id="introScreen" class="screen">
+        <div class="intro-container">
+            <div class="intro-content">
+                <h1 class="game-title">Overflow Palette</h1>
+                <h2 class="game-subtitle">A Sunday in Riccioli: Easy</h2>
+                <p class="game-description">
+                    It's a quiet afternoon on the Riccioli Islands. The sea breeze is warm and gentle, 
+                    while the sun casts gold through the lighthouse across the shores. In light and shadow, 
+                    a fisherman stands patiently with his rod, waiting for his prize catch.
+                </p>
+                
+                <div class="difficulty-selection">
+                    <h3>Chọn độ khó:</h3>
+                    <div class="difficulty-buttons">
+                        <button class="btn btn--secondary difficulty-btn active" data-difficulty="easy">
+                            <span class="difficulty-label">Dễ</span>
+                            <span class="difficulty-info">6 bước • 3 màu</span>
+                        </button>
+                        <button class="btn btn--secondary difficulty-btn" data-difficulty="normal">
+                            <span class="difficulty-label">Bình thường</span>
+                            <span class="difficulty-info">4 bước • 4 màu</span>
+                        </button>
+                        <button class="btn btn--secondary difficulty-btn" data-difficulty="difficult">
+                            <span class="difficulty-label">Khó</span>
+                            <span class="difficulty-info">3 bước • 5 màu</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="preview-grid">
+                    <div class="preview-cell" style="background-color: #E74C3C;"></div>
+                    <div class="preview-cell" style="background-color: #2ECC71;"></div>
+                    <div class="preview-cell" style="background-color: #3498DB;"></div>
+                    <div class="preview-cell" style="background-color: #F1C40F;"></div>
+                    <div class="preview-cell" style="background-color: #9B59B6;"></div>
+                    <div class="preview-cell" style="background-color: #E74C3C;"></div>
+                    <div class="preview-cell" style="background-color: #2ECC71;"></div>
+                    <div class="preview-cell" style="background-color: #3498DB;"></div>
+                    <div class="preview-cell" style="background-color: #F1C40F;"></div>
+                </div>
+
+                <button class="btn btn--primary go-button" id="startGame">Bắt đầu</button>
+                <button class="btn btn--outline btn--sm" id="backToHubFromIntro">← Hub</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+        <div class="game-container">
+        <header class="game-header">
+                <div class="game-info">
+                    <div class="moves-counter">
+                        <span class="label">Số bước còn lại:</span>
+                        <span class="value" id="movesRemaining">3</span>
+                    </div>
+                    <button class="btn btn--outline btn--sm" id="resetButton">Reset</button>
+            <button class="btn btn--secondary btn--sm" id="backToHubBtn">← Hub</button>
+                </div>
+            </header>
+
+            <main class="game-content">
+                <div class="grid-container">
+                    <div id="gameGrid" class="game-grid"></div>
+                </div>
+                
+                <div class="color-palette">
+                    <h3>Chọn màu:</h3>
+                    <div class="color-buttons" id="colorButtons"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div id="winModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="celebration-effects"></div>
+            <h2>🎉 Chúc mừng!</h2>
+            <p>Bạn đã hoàn thành màn chơi!</p>
+            <div class="modal-buttons">
+                <button class="btn btn--primary" id="nextLevelBtn">Màn tiếp theo ➜</button>
+                <button class="btn btn--secondary" id="playAgainBtn">Chơi lại</button>
+                <button class="btn btn--outline" id="backToMenuBtn">Trở về menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lose Modal -->
+    <div id="loseModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>😔 Hết lượt!</h2>
+            <p>Bạn đã hết số bước cho phép. Hãy thử lại!</p>
+            <div class="modal-buttons">
+                <button class="btn btn--primary" id="tryAgainBtn">Thử lại</button>
+                <button class="btn btn--secondary" id="backToMenuBtn2">Trở về menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Particle Effects Container -->
+    <div id="particleContainer" class="particle-container"></div>
+
+    <!-- Audio Elements (Hidden) -->
+    <audio id="clickSound" preload="auto" style="display: none;">
+        <!-- Simulate sound with JS -->
+    </audio>
+    <audio id="successSound" preload="auto" style="display: none;"></audio>
+    <audio id="failSound" preload="auto" style="display: none;"></audio>
+
+    <script src="app.js"></script>
+</body>
+</html>
