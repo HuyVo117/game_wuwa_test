@@ -313,6 +313,28 @@ body {
   padding: 0;
 }
 
+/* Hub & Level Select */
+.hub-screen {
+  display: none;
+  padding: 40px 24px 80px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.hub-screen.active { display: block; }
+.hub-header { text-align: center; margin-bottom: 32px; }
+.hub-title { font-size: 48px; background: linear-gradient(90deg,#ff7e5f,#feb47b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hub-subtitle { font-size: 16px; font-weight: 400; color: var(--color-text-secondary); }
+.levels-container { display: flex; justify-content: center; }
+.levels-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(64px,1fr)); gap: 16px; width: 100%; max-width: 640px; }
+.level-btn { position: relative; border: 2px solid var(--color-border); background: var(--color-surface); border-radius: 18px; height: 64px; font-size: 20px; font-weight: 600; cursor: pointer; color: var(--color-primary); box-shadow: var(--shadow-sm); transition: transform .25s var(--ease-standard), box-shadow .25s; }
+.level-btn:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.level-btn:active { transform: translateY(0); }
+.hub-footer { text-align: center; margin-top: 40px; }
+
+/* Screen switching */
+.screen { display: none; }
+.screen.active { display: block; }
+
 *,
 *::before,
 *::after {
@@ -956,21 +978,34 @@ select.form-control {
     grid-template-columns: repeat(10, 1fr);
     gap: var(--space-2);
     padding: var(--space-16);
-    background: var(--color-surface);
+    background: linear-gradient(145deg,#fefefe,#ece7e2);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     border: 2px solid var(--color-card-border);
+    position: relative;
+    overflow: hidden;
+}
+.game-grid::after {
+  content: '';
+  position: absolute; inset:0;
+  background: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 10px, transparent 10px 20px);
+  pointer-events: none;
+  mix-blend-mode: overlay;
 }
 
 .grid-cell {
     width: 40px;
     height: 40px;
     border-radius: var(--radius-sm);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(.22,1.56,.36,1), box-shadow 0.4s, filter 0.4s;
     cursor: pointer;
     border: 1px solid rgba(0,0,0,0.1);
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 4px 6px rgba(255,255,255,0.6), inset 0 -4px 6px rgba(0,0,0,0.15), 0 3px 4px rgba(0,0,0,0.15);
+    background-image:
+      linear-gradient(155deg, rgba(255,255,255,0.65), rgba(255,255,255,0) 55%),
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), transparent 60%);
 }
 
 .grid-cell::before {
@@ -987,6 +1022,12 @@ select.form-control {
 
 .grid-cell:hover::before {
     opacity: 1;
+}
+
+.grid-cell:hover {
+  transform: translateY(-4px) scale(1.08) rotateZ(-1deg);
+  box-shadow: inset 0 4px 6px rgba(255,255,255,0.7), inset 0 -4px 8px rgba(0,0,0,0.25), 0 8px 14px -4px rgba(0,0,0,0.25);
+  z-index: 2;
 }
 
 .grid-cell.changing {
@@ -1026,9 +1067,13 @@ select.form-control {
     border-radius: 50%;
     border: 3px solid transparent;
     cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-standard);
+    transition: transform .35s cubic-bezier(.22,1.56,.36,1), box-shadow .4s, filter .4s;
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 6px 8px rgba(255,255,255,0.6), inset 0 -6px 10px rgba(0,0,0,0.25), 0 4px 8px rgba(0,0,0,0.25);
+    background-image:
+      linear-gradient(155deg, rgba(255,255,255,0.65), rgba(255,255,255,0) 55%),
+      radial-gradient(circle at 28% 30%, rgba(255,255,255,0.85), transparent 60%);
 }
 
 .color-btn::before {
@@ -1044,9 +1089,9 @@ select.form-control {
 }
 
 .color-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px currentColor;
-    border-color: rgba(255,255,255,0.5);
+  transform: translateY(-6px) scale(1.15) rotateZ(2deg);
+  box-shadow: inset 0 6px 10px rgba(255,255,255,0.7), inset 0 -8px 14px rgba(0,0,0,0.3), 0 10px 18px -4px rgba(0,0,0,0.35), 0 0 22px -4px currentColor;
+  border-color: rgba(255,255,255,0.55);
 }
 
 .color-btn:hover::before {
@@ -1054,7 +1099,8 @@ select.form-control {
 }
 
 .color-btn:active {
-    transform: scale(0.95);
+  transform: translateY(0) scale(0.92);
+  filter: brightness(.9);
 }
 
 /* Modals */

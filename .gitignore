@@ -1,0 +1,71 @@
+# Node / Vite / React build artifacts
+node_modules/
+dist/
+.cache/
+.tmp/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+logs/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.swm
+.DS_Store
+Thumbs.db
+
+# Coverage & test
+coverage/
+*.lcov
+
+# Build outputs
+build/
+ssr/
+
+# Optional lockfiles (choose one to keep tracked if desired)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Storybook / other tools
+storybook-static/
+.out/
+
+# Temporary
+*.tmp
+*.temp
+~$*
+
+# Local runtime caches
+.cache-loader/
+.eslintcache
+.stylelintcache
+.prettier-cache
+
+# Git merge backups
+*.orig
+
+# Misc
+*.tgz
+
+# Images optimization caches
+*.iml
+
+# Windows
+ehthumbs.db
+Desktop.ini
